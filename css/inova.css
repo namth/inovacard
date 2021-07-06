@@ -1,0 +1,18 @@
+body {
+  background: #f6f6f6;
+}
+
+#create_card_form {
+  display: none;
+  padding: 20px;
+}
+
+.inova_card {
+  margin: 15px 0;
+}
+
+.inova_card h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f6f6f6;
+}
+/*# sourceMappingURL=inova.css.map */

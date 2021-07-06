@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,IAAI,CAAC;EACD,UAAU,EAHI,OAAO;CAGU;;AAEnC,AAAA,iBAAiB,CAAC;EACd,OAAO,EAAE,IAAI;EACb,OAAO,EAAE,IAAI;CAAG;;AAEpB,AAAA,WAAW,CAAC;EACR,MAAM,EAAE,MAAM;CAI6B;;AAL/C,AAGI,WAHO,CAGP,EAAE,CAAC;EACC,WAAW,EAAE,4BAA4B;EACzC,gBAAgB,EAdN,OAAO;CAcoB",
+    "sources": [
+        "inova.sass"
+    ],
+    "names": [],
+    "file": "inova.css"
+}
