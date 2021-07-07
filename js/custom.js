@@ -1,9 +1,6 @@
 var lp = "./img/";
 var plp = "//placehold.it/350x250/";
 var images = [
-  lp + "team1.jpg",
-  lp + "team2.jpg",
-  lp + "team3.jpg",
   plp + "78c5d6/fff/image1.jpg",
   plp + "459ba8/fff/image2.jpg",
   plp + "79c267/fff/image3.jpg",
@@ -11,9 +8,6 @@ var images = [
   plp + "f28c33/fff/image5.jpg",
   plp + "e868a2/fff/image6.jpg",
   plp + "cc4360/fff/image7.jpg",
-  lp + "work-desk.jpg",
-  lp + "phone-app.png",
-  lp + "bg-gr-v.png",
 ];
 var postid = document.getElementById("postid").value;
 
