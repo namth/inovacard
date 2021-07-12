@@ -1,5 +1,6 @@
 <?php 
     get_header();
+    get_template_part('header','topbar');
 
     if (isset($_POST['card_name'])) {
         $args = array(

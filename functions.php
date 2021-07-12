@@ -1,18 +1,19 @@
 <?php
 // function
-register_nav_menus( array( 'main-menu' => esc_html__( 'Main Menu', 'inovacards' ) ) );
-add_theme_support( 'title-tag' );
+register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'inovacards')));
+add_theme_support('title-tag');
 
-add_action( 'wp_enqueue_scripts', 'inovacards_load_scripts' );
-function inovacards_load_scripts() {
+add_action('wp_enqueue_scripts', 'inovacards_load_scripts');
+function inovacards_load_scripts()
+{
     /* Css */
-    wp_enqueue_style( 'main-style', get_template_directory_uri() . '/style.css' );
-    
+    wp_enqueue_style('main-style', get_template_directory_uri() . '/style.css');
+
     /* Js */
-	wp_enqueue_script( 'jquery' );
+    wp_enqueue_script('jquery');
 
     /** Call design-cards enqueue */
-    if ( is_page( 'design-cards' ) ) {
+    if (is_page('design-cards')) {
         /* CSS */
         wp_enqueue_style( 'toastr', get_template_directory_uri() . '/css/toastr.min.css' );
         wp_enqueue_style( 'grapes', get_template_directory_uri() . '/css/grapes.min.css' );
@@ -42,5 +43,62 @@ function inovacards_load_scripts() {
 
         wp_enqueue_script( 'mui', get_template_directory_uri() . '/js/mui.min.js', array('jquery'), '1.0', true );
         wp_enqueue_script( 'inova', get_template_directory_uri() . '/js/inova.js', array('jquery', 'mui'), '1.0', true );
+        wp_enqueue_script( 'font-awesome', 'https://kit.fontawesome.com/dfe5b27416.js', array( ), '4.0', true );
     }
+}
+
+/* Update plain text */
+function update_plain_field($field_key = '', $field_name = '', $plain = '', $postid = '')
+{
+    global $wpdb;
+    $table = $wpdb->prefix . 'postmeta';
+    $field = $wpdb->get_results("SELECT * FROM $table WHERE post_id = '$postid' AND meta_key = '$field_name'");
+    if ($field) {
+        $wpdb->update(
+            $table,
+            array(
+                'meta_value' => serialize($plain)
+            ),
+            array(
+                'post_id' => $postid,
+                'meta_key'=> $field_name
+            ),
+            array('%s')
+        );
+    } else {
+        $wpdb->insert(
+            $table,
+            array(
+                'post_id' => $postid,
+                'meta_key' => $field_name,
+                'meta_value' => serialize($plain),
+            ),
+            array(
+                '%d',
+                '%s',
+                '%s',
+            )
+        );
+        $wpdb->insert(
+            $table,
+            array(
+                'post_id' => $postid,
+                'meta_key' => '_' . $field_name,
+                'meta_value' => serialize($plain)
+            ),
+            array(
+                '%d',
+                '%s',
+                '%s',
+            )
+        );
+
+    }
+}
+
+/* Redirect after logout */
+add_action('wp_logout','ps_redirect_after_logout');
+function ps_redirect_after_logout(){
+         wp_redirect( get_bloginfo('url') );
+         exit();
 }

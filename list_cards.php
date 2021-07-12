@@ -1,8 +1,6 @@
 <?php 
-/* 
-    Template Name: List Cards
-*/
     get_header();
+    get_template_part('header','topbar');
 
     if (isset($_POST['card_name'])) {
         $args = array(
@@ -13,6 +11,10 @@
 
         $inserted = wp_insert_post( $args, $error );
     }
+
+    if ( have_posts() ) {
+        while ( have_posts() ) {
+            the_post();
 ?>
     <div class="mui-container-fluid">
         <div class="mui-row">
@@ -21,7 +23,7 @@
             </div>
             <div class="mui-col-md-7">
                 <div class="mui-panel">
-                    <?php the_title(); ?>
+                    <h3>Danh sách thiệp của tôi</h3>
                     <div class="mui-divider"></div>
                     <div class="mui-row">
                         <?php 
@@ -50,6 +52,25 @@
                                     <?php the_title(); ?>
                                 </div>
                             </a>
+                            <div class="function_icon">
+                                <ul>
+                                    <li>
+                                        <a href="<?php echo get_permalink( 16 ) . '?postid=' . get_the_ID(); ?>"><i class="fas fa-broom"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo get_permalink( 28 ) . '?id=' . get_the_ID(); ?>"><i class="fas fa-code"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo get_permalink(); ?>" target="_blank"><i class="fas fa-eye"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href=""><i class="fas fa-pencil-alt"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="?delete=<?php echo get_the_ID(); ?>"><i class="far fa-trash-alt"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <?php 
                                 } wp_reset_postdata();
@@ -84,5 +105,7 @@
         </form>
     </div>
 <?php 
+        }
+    }
     get_footer();
 ?>

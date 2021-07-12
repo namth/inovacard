@@ -1,6 +1,6 @@
 var lp = "./img/";
 var plp = "//placehold.it/350x250/";
-var images = [
+/* var images = [
   plp + "78c5d6/fff/image1.jpg",
   plp + "459ba8/fff/image2.jpg",
   plp + "79c267/fff/image3.jpg",
@@ -8,7 +8,7 @@ var images = [
   plp + "f28c33/fff/image5.jpg",
   plp + "e868a2/fff/image6.jpg",
   plp + "cc4360/fff/image7.jpg",
-];
+]; */
 var postid = document.getElementById("postid").value;
 
 var editor = grapesjs.init({
@@ -19,7 +19,7 @@ var editor = grapesjs.init({
   showOffsets: 1,
   assetManager: {
     embedAsBase64: 1,
-    assets: images,
+    // assets: images,
   },
   selectorManager: {
     componentFirst: true,
@@ -30,7 +30,7 @@ var editor = grapesjs.init({
   storageManager: {
     type: "remote",
     stepsBeforeSave: 1,
-    autosave: false, // Store data automatically
+    autosave: true, // Store data automatically
     autoload: true,
     urlStore: "http://localhost/inovacards/index.php/save-card/?id=" + postid,
     urlLoad: "http://localhost/inovacards/index.php/load-card/?id=" + postid,
@@ -55,7 +55,7 @@ var editor = grapesjs.init({
   },
   canvas: {
     styles: [
-      "https://fonts.googleapis.com/css2?family=Alex+Brush&family=Dancing+Script:wght@400;500;600;700&family=Italianno&family=Qwigley&display=swap",
+      "https://fonts.googleapis.com/css2?family=Alex+Brush&family=Dancing+Script:wght@400;500;600;700&family=Italianno&family=Qwigley&family=Lobster&family=Sansita+Swashed:wght@300;400;500;600;700;800;900&family=Srisakdi:wght@400;700&display=swap",
       "http://fonts.cdnfonts.com/css/uvf-aphrodite-pro",
     ],
   },
@@ -84,6 +84,7 @@ var editor = grapesjs.init({
       customStyleManager: [
         {
           name: "Thông số chung",
+          open: false,
           buildProps: [
             "float",
             "display",
@@ -122,7 +123,7 @@ var editor = grapesjs.init({
         },
         {
           name: "Kích thước",
-          open: false,
+          open: true,
           buildProps: [
             "width",
             "flex-width",
@@ -204,11 +205,18 @@ var editor = grapesjs.init({
               name: "Font",
               property: "font-family",
               list: [
-                { value: "Italianno", name: "Italianno" },
-                { value: "Qwigley", name: "Qwigley" },
+                { value: "Arial", name: "Arial" },
+                { value: "Tahoma", name: "Tahoma" },
+                { value: "Comic Sans MS", name: "Comic Sans MS" },
+                { value: "Times New Roman", name: "Times New Roman" },
                 { value: "Alex Brush", name: "Alex Brush" },
                 { value: "Dancing Script", name: "Dancing Script" },
+                { value: "Italianno", name: "Italianno" },
+                { value: "Lobster", name: "Lobster" },
+                { value: "Qwigley", name: "Qwigley" },
                 { value: "UVF Aphrodite Pro", name: "UVF Aphrodite Pro" },
+                { value: "Sansita Swashed", name: "Sansita Swashed" },
+                { value: "Srisakdi", name: "Srisakdi" },
               ],
             },
             {
@@ -750,7 +758,7 @@ editor.on("storage:load", function (e) {
   // console.log('Loaded ', e)
 });
 editor.on("storage:store", function (e) {
-  // console.log('Stored ', e.html);
+  // console.log('Stored ', e.components);
 });
 
 // Do stuff on load
