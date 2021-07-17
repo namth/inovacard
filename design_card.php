@@ -9,6 +9,8 @@ if (isset($_GET['postid'])) {
 
 if ($postid) {
     echo '<input id="postid" type="hidden" name="postid" value="' . $postid . '">';
+    echo '<input id="savelink" type="hidden" name="savelink" value="' . get_permalink(26) . '">';
+    echo '<input id="loadlink" type="hidden" name="loadlink" value="' . get_permalink(28) . '">';
 }
 ?>
 <div style="display: none">

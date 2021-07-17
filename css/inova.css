@@ -36,11 +36,15 @@ a:hover {
 
 .inova_card .function_icon ul li {
   list-style: none;
-  display: inline list-item;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .inova_card .function_icon ul li a {
-  display: inline flow-root list-item;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   border: 1px solid #f6f6f6;
   -webkit-box-shadow: 1px 1px 3px lightgray;
           box-shadow: 1px 1px 3px lightgray;
