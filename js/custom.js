@@ -814,7 +814,7 @@ editor.Commands.add("save-db", {
 const block = editor.BlockManager;
 
 block.add('inovacards-wrapper-block', {
-    label: 'Vỏ thiệp',
+    label: 'Khung thiệp',
     content: {
         draggable: true,
         components: [{

@@ -20,6 +20,10 @@ a:hover {
   margin: 15px 0;
 }
 
+.inova_card img {
+  max-width: 100%;
+}
+
 .inova_card h3 {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f6f6f6;

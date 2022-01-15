@@ -52,11 +52,13 @@ if (have_posts()) {
                                 while ($query->have_posts()) {
                                     $query->the_post();
 
+                                    $image = get_the_post_thumbnail_url();
+
                             ?>
                                     <div class="mui-col-md-4 inova_card">
                                         <a href="<?php echo get_permalink(16) . '?postid=' . get_the_ID(); ?>">
                                             <div class="mui-panel">
-                                                <img src="" alt="">
+                                                <img src="<?php echo $image; ?>" alt="">
                                                 <?php the_title(); ?>
                                             </div>
                                         </a>
