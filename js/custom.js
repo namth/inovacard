@@ -1,14 +1,5 @@
-var lp = "./img/";
-var plp = "//placehold.it/350x250/";
-/* var images = [
-  plp + "78c5d6/fff/image1.jpg",
-  plp + "459ba8/fff/image2.jpg",
-  plp + "79c267/fff/image3.jpg",
-  plp + "c5d647/fff/image4.jpg",
-  plp + "f28c33/fff/image5.jpg",
-  plp + "e868a2/fff/image6.jpg",
-  plp + "cc4360/fff/image7.jpg",
-]; */
+var savelink = document.getElementById("savelink").value;
+var loadlink = document.getElementById("loadlink").value;
 var postid = document.getElementById("postid").value;
 
 var editor = grapesjs.init({
@@ -32,8 +23,8 @@ var editor = grapesjs.init({
     stepsBeforeSave: 1,
     autosave: true, // Store data automatically
     autoload: true,
-    urlStore: "http://localhost/inovacards/index.php/save-card/?id=" + postid,
-    urlLoad: "http://localhost/inovacards/index.php/load-card/?id=" + postid,
+    urlStore: savelink + "?id=" + postid,
+    urlLoad: loadlink + "?id=" + postid,
     contentTypeJson: true,
     storeComponents: true,
     storeStyles: true,
@@ -56,7 +47,7 @@ var editor = grapesjs.init({
   canvas: {
     styles: [
       "https://fonts.googleapis.com/css2?family=Alex+Brush&family=Dancing+Script:wght@400;500;600;700&family=Italianno&family=Qwigley&family=Lobster&family=Sansita+Swashed:wght@300;400;500;600;700;800;900&family=Srisakdi:wght@400;700&display=swap",
-      "http://fonts.cdnfonts.com/css/uvf-aphrodite-pro",
+      "https://fonts.cdnfonts.com/css/uvf-aphrodite-pro",
     ],
   },
   plugins: [
@@ -823,7 +814,7 @@ editor.Commands.add("save-db", {
 const block = editor.BlockManager;
 
 block.add('inovacards-wrapper-block', {
-    label: 'Vỏ thiệp',
+    label: 'Khung thiệp',
     content: {
         draggable: true,
         components: [{

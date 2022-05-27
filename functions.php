@@ -2,6 +2,7 @@
 // function
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'inovacards')));
 add_theme_support('title-tag');
+add_theme_support( 'post-thumbnails' );
 
 add_action('wp_enqueue_scripts', 'inovacards_load_scripts');
 function inovacards_load_scripts()

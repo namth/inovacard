@@ -20,6 +20,10 @@ a:hover {
   margin: 15px 0;
 }
 
+.inova_card img {
+  max-width: 100%;
+}
+
 .inova_card h3 {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f6f6f6;
@@ -36,11 +40,15 @@ a:hover {
 
 .inova_card .function_icon ul li {
   list-style: none;
-  display: inline list-item;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .inova_card .function_icon ul li a {
-  display: inline flow-root list-item;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   border: 1px solid #f6f6f6;
   -webkit-box-shadow: 1px 1px 3px lightgray;
           box-shadow: 1px 1px 3px lightgray;
