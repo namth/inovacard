@@ -4,10 +4,12 @@
 */
 header("Content-Type:application/json");
 
+$paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+
 $args   = array(
     'post_type'         => 'inova_card',
     'paged'             => $paged,
-    'posts_per_page'    => -1,
+    'posts_per_page'    => 50,
 );
 
 if (isset($_GET['id']) && ($_GET['id']!="")) {
