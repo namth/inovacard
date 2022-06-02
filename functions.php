@@ -103,3 +103,10 @@ function ps_redirect_after_logout(){
          wp_redirect( get_bloginfo('url') );
          exit();
 }
+
+add_action('init','all_my_hooks');
+function all_my_hooks(){
+    $dir = dirname( __FILE__ );
+    require_once( $dir . '/inc/custom_post.php');
+    require_once( $dir . '/inc/custom_field.php');
+}
