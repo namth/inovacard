@@ -29,14 +29,14 @@ function cptui_register_my_cpts() {
 		"map_meta_cap" => true,
 		"hierarchical" => false,
 		"can_export" => false,
-		"rewrite" => [ "slug" => "inova_card", "with_front" => true ],
+		"rewrite" => [ "slug" => "inovacard", "with_front" => true ],
 		"query_var" => true,
 		"supports" => [ "title", "editor", "thumbnail", "excerpt", "author" ],
 		"taxonomies" => [ "category", "post_tag" ],
 		"show_in_graphql" => false,
 	];
 
-	register_post_type( "inova_card", $args );
+	register_post_type( "inovacard", $args );
 }
 
 add_action( 'init', 'cptui_register_my_cpts' );

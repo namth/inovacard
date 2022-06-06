@@ -7,7 +7,7 @@ header("Content-Type:application/json");
 $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
 $args   = array(
-    'post_type'         => 'inova_card',
+    'post_type'         => 'inovacard',
     'paged'             => $paged,
     'posts_per_page'    => 50,
 );

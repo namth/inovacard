@@ -16,36 +16,36 @@ a:hover {
   padding: 20px;
 }
 
-.inova_card {
+.inovacard {
   margin: 15px 0;
 }
 
-.inova_card img {
+.inovacard img {
   max-width: 100%;
 }
 
-.inova_card h3 {
+.inovacard h3 {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f6f6f6;
 }
 
-.inova_card .mui-panel {
+.inovacard .mui-panel {
   margin: 0;
 }
 
-.inova_card .function_icon ul {
+.inovacard .function_icon ul {
   margin: 5px 0 0;
   padding: 0;
 }
 
-.inova_card .function_icon ul li {
+.inovacard .function_icon ul li {
   list-style: none;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.inova_card .function_icon ul li a {
+.inovacard .function_icon ul li a {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -58,7 +58,7 @@ a:hover {
   text-align: center;
 }
 
-.inova_card .function_icon ul li a:hover {
+.inovacard .function_icon ul li a:hover {
   background-color: #f55a4e;
   color: white;
 }

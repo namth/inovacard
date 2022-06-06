@@ -13,7 +13,7 @@ if (isset($_POST['card_name'])) {
     $args = array(
         'post_title'    => $_POST['card_name'],
         'post_status'   => 'publish',
-        'post_type'     => 'inova_card',
+        'post_type'     => 'inovacard',
     );
 
     $inserted = wp_insert_post($args, $error);
@@ -40,7 +40,7 @@ if (have_posts()) {
                             $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
                             $args   = array(
-                                'post_type'     => 'inova_card',
+                                'post_type'     => 'inovacard',
                                 'paged'         => $paged,
                                 'posts_per_page' => 20,
                                 'author'        => $current_user_id,
@@ -55,7 +55,7 @@ if (have_posts()) {
                                     $image = get_the_post_thumbnail_url();
 
                             ?>
-                                    <div class="mui-col-md-4 inova_card">
+                                    <div class="mui-col-md-4 inovacard">
                                         <a href="<?php echo get_permalink(16) . '?postid=' . get_the_ID(); ?>">
                                             <div class="mui-panel">
                                                 <img src="<?php echo $image; ?>" alt="">
