@@ -30,13 +30,6 @@ function api_list_card() {
         'posts_per_page'    => 50,
     );
 
-    if (isset($_GET['id']) && ($_GET['id']!="")) {
-        $args['p'] = $_GET['id'];
-        $fullcontent = true;
-    } else {
-        $fullcontent = false;
-    }
-
     $query = new WP_Query($args);
 
     $data   = array();
@@ -56,11 +49,6 @@ function api_list_card() {
             $data[$i]['title']      = get_the_title();
             $data[$i]['thumbnail']  = $image;
 
-            # full content
-            if ($fullcontent) {
-                $data[$i]['content'] = get_the_content();
-            }
-            
             # more content
             $data[$i]['price']      = $price;
             $data[$i]['liked']      = $liked;
@@ -93,20 +81,15 @@ function api_detail_card($params) {
             $used   = get_field('used');
 
             # basic content
-            $data[$i]['ID']         = get_the_ID();
-            $data[$i]['title']      = get_the_title();
-            $data[$i]['thumbnail']  = $image;
-            $data[$i]['content']    = get_the_content();
+            $data['ID']         = get_the_ID();
+            $data['title']      = get_the_title();
+            $data['thumbnail']  = $image;
+            $data['content']    = get_the_content();
 
-            # full content
-            if ($fullcontent) {
-                $data[$i]['content'] = get_the_content();
-            }
-            
             # more content
-            $data[$i]['price']      = $price;
-            $data[$i]['liked']      = $liked;
-            $data[$i]['used']       = $used;
+            $data['price']      = $price;
+            $data['liked']      = $liked;
+            $data['used']       = $used;
         } wp_reset_postdata();
     } else {
         $data['error_code'] = "404";
