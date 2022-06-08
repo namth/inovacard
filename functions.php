@@ -109,4 +109,7 @@ function all_my_hooks(){
     $dir = dirname( __FILE__ );
     require_once( $dir . '/inc/custom_post.php');
     require_once( $dir . '/inc/custom_field.php');
+    
+    # API function library
+    require_once( $dir . '/api_inovacard.php');
 }
