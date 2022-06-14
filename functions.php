@@ -113,3 +113,5 @@ function all_my_hooks(){
     # API function library
     require_once( $dir . '/api_inovacard.php');
 }
+
+

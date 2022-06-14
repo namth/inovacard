@@ -1,10 +1,16 @@
 <?php 
 
 add_action('rest_api_init', function (){
+    # get access token
+    register_rest_route('inova/v1/', 'gettoken', array(
+        'methods'   => 'POST',
+        'callback'  => 'get_token',
+    ));
     # get list cards
     register_rest_route('inova/v1', 'cards', array(
         'methods'   => 'GET',
         'callback'  => 'api_list_card',
+        'permission_callback' => 'check_access',
     ));
 
     # get detail each card
@@ -18,8 +24,40 @@ add_action('rest_api_init', function (){
                 }
             ),
         ),
+        'permission_callback' => 'check_access',
     ));
+
+
 });
+
+function get_token(){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $check = wp_authenticate_username_password( NULL, $username, $password );
+    $user_obj = get_user_by('login', $username);
+
+    if($check){
+        $randomCode = wp_create_nonce($username .'|'. $check->data->user_pass);
+        $data['token'] = hash('sha256', $randomCode);
+    } else {
+        $data['error_code'] = 401;
+        $data['message']    = "Không tạo được token.";
+    }
+    return $data;
+}
+
+function check_access(WP_REST_Request $request){
+    $token  = $request->get_header('Authorization');
+    $username = 'inovacard';
+    $user_obj = get_user_by('login', $username);
+    $randomCode = wp_create_nonce($username.'|'.$user_obj->data->user_pass);
+    $datatoken = hash('sha256', $randomCode);
+
+    if ($token === $datatoken) {
+        return true;
+    }
+    return false;
+}
 
 function api_list_card() {
     $paged = ($_GET['page']) ? absint($_GET['page']) : 1;
