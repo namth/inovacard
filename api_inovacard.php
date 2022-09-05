@@ -184,11 +184,34 @@ function api_html_card($params) {
         while ($query->have_posts()) {
             $query->the_post();
 
+            $type = get_field('type');
             $html = get_field('html');
-            $css = '<style type="text/css">' . get_field('css') . '</style>';
+            $css  = '';
+            $js   = '';
+
+            if ($type!='HTML') {
+                $css = '<style type="text/css">' . get_field('css') . '</style>';
+            } else {
+                $css_arr = explode(PHP_EOL, get_field('css'));
+                foreach ($css_arr as $value) {
+                    if ($value) {
+                        $css .= '<link rel="stylesheet" href="' . $value . '" type="text/css" />';
+                    }
+                }
+
+                $js_arr = explode(PHP_EOL, get_field('components'));
+                foreach ($js_arr as $value) {
+                    if ($value) {
+                        $js .= '<script src="' . $value . '"></script>';
+                    }
+                }
+            }
 
             # basic content
-            $data['html']   = $css . $html;
+            $data['type']   = $type;
+            $data['html']   = $html;
+            $data['css']    = $css;
+            $data['js']     = $js;
         } wp_reset_postdata();
     } else {
         $data['error_code'] = "404";

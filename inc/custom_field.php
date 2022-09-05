@@ -6,6 +6,30 @@ if( function_exists('acf_add_local_field_group') ):
         'title' => 'Inova Card',
         'fields' => array(
             array(
+                'key' => 'field_6314d75cf5be5',
+                'label' => 'Type',
+                'name' => 'type',
+                'type' => 'radio',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'choices' => array(
+                    'GrapeJS' => 'GrapeJS',
+                    'HTML' => 'HTML',
+                ),
+                'allow_null' => 0,
+                'other_choice' => 0,
+                'default_value' => '',
+                'layout' => 'vertical',
+                'return_format' => 'value',
+                'save_other_choice' => 0,
+            ),
+            array(
                 'key' => 'field_60e16c5bab331',
                 'label' => 'HTML',
                 'name' => 'html',
