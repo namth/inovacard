@@ -53,7 +53,6 @@ if (have_posts()) {
                                     $query->the_post();
 
                                     $image = get_the_post_thumbnail_url();
-
                             ?>
                                     <div class="mui-col-md-4 inovacard">
                                         <a href="<?php echo get_permalink(16) . '?postid=' . get_the_ID(); ?>">

@@ -2,12 +2,12 @@
 
 add_action('rest_api_init', function (){
     # get access token
-    register_rest_route('inova/v1/', 'gettoken', array(
+    register_rest_route('inova/v1', 'gettoken', array(
         'methods'   => 'POST',
         'callback'  => 'get_token',
     ));
     # check token
-    register_rest_route('inova/v1/', 'checktoken', array(
+    register_rest_route('inova/v1', 'checktoken', array(
         'methods'   => 'POST',
         'callback'  => 'check_token',
         'permission_callback' => 'check_access',
@@ -148,6 +148,8 @@ function api_detail_card($params) {
         while ($query->have_posts()) {
             $query->the_post();
 
+            $terms = get_the_terms(get_the_ID(), 'category');
+
             $image  = get_the_post_thumbnail_url();
             $price  = get_field('price');
             $liked  = get_field('liked');
@@ -158,6 +160,7 @@ function api_detail_card($params) {
             $data['title']      = get_the_title();
             $data['thumbnail']  = $image;
             $data['content']    = get_the_content();
+            $data['terms']      = $terms;
 
             # more content
             $data['price']      = $price;
@@ -184,34 +187,57 @@ function api_html_card($params) {
         while ($query->have_posts()) {
             $query->the_post();
 
-            $type = get_field('type');
-            $html = get_field('html');
-            $css  = '';
-            $js   = '';
+            $content1   = get_field('content_1');
+            $content2   = get_field('content_2');
+            $content3   = get_field('content_3');
+            $content4   = get_field('content_4');
+            $type   = get_field('type');
+            $html   = get_field('html');
+            $css    = '';
+            $js     = '';
 
             if ($type!='HTML') {
                 $css = '<style type="text/css">' . get_field('css') . '</style>';
             } else {
-                $css_arr = explode(PHP_EOL, get_field('css'));
+                # nếu là loại HTML thì xử lý 
+                $css_arr = explode('|', get_field('css'));
                 foreach ($css_arr as $value) {
                     if ($value) {
-                        $css .= '<link rel="stylesheet" href="' . $value . '" type="text/css" />';
+                        $filelink = wp_get_attachment_url($value);
+                        $css .= '<link rel="stylesheet" href="' . $filelink . '" type="text/css" />';
                     }
                 }
 
-                $js_arr = explode(PHP_EOL, get_field('components'));
+                $js_arr = explode('|', get_field('components'));
                 foreach ($js_arr as $value) {
                     if ($value) {
-                        $js .= '<script src="' . $value . '"></script>';
+                        $filelink = wp_get_attachment_url($value);
+                        $js .= '<script src="' . $filelink . '"></script>';
                     }
                 }
+
+                $assets_arr = explode('|', get_field('assets'));
+                foreach ($assets_arr as $value) {
+                    if ($value) {
+                        $filelink = wp_get_attachment_url($value);
+                        $filename = '{' . basename($filelink) . '}';
+                        $assets[$filename] = $filelink;
+                    }
+                }
+
+                $data_replace = array_merge([
+                    '{html_header}' => $css . '{wp_header}',
+                    '{html_footer}' => $js . '{wp_footer}'
+                ], $assets);
+                $data_replace['{home_url}'] = get_bloginfo('url');
             }
 
             # basic content
-            $data['type']   = $type;
-            $data['html']   = $html;
-            $data['css']    = $css;
-            $data['js']     = $js;
+            $data['html']   = replace_content($data_replace, $html);
+            $data['content1'] = $content1;
+            $data['content2'] = $content2;
+            $data['content3'] = $content3;
+            $data['content4'] = $content4;
         } wp_reset_postdata();
     } else {
         $data['error_code'] = "404";

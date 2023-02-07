@@ -40,11 +40,16 @@ function inovacards_load_scripts()
         ));
     } else {
         wp_enqueue_style( 'mui', get_template_directory_uri() . '/css/mui.min.css' );
+        wp_enqueue_style( 'jquery-linedtextarea', get_template_directory_uri() . '/css/jquery-linedtextarea.css' );
         wp_enqueue_style( 'inova', get_template_directory_uri() . '/css/inova.css' );
 
         wp_enqueue_script( 'mui', get_template_directory_uri() . '/js/mui.min.js', array('jquery'), '1.0', true );
+        wp_enqueue_script( 'jquery-linedtextarea', get_template_directory_uri() . '/js/jquery-linedtextarea.js', array('jquery', 'mui'), '1.0', true );
         wp_enqueue_script( 'inova', get_template_directory_uri() . '/js/inova.js', array('jquery', 'mui'), '1.0', true );
         wp_enqueue_script( 'font-awesome', 'https://kit.fontawesome.com/dfe5b27416.js', array( ), '4.0', true );
+        wp_localize_script( 'inova', 'AJAX', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' )
+        ));
     }
 }
 
@@ -100,8 +105,8 @@ function update_plain_field($field_key = '', $field_name = '', $plain = '', $pos
 /* Redirect after logout */
 add_action('wp_logout','ps_redirect_after_logout');
 function ps_redirect_after_logout(){
-         wp_redirect( get_bloginfo('url') );
-         exit();
+    wp_redirect( get_bloginfo('url') );
+    exit();
 }
 
 add_action('init','all_my_hooks');
@@ -110,6 +115,9 @@ function all_my_hooks(){
     require_once( $dir . '/inc/custom_post.php');
     require_once( $dir . '/inc/custom_field.php');
     
+    # AJAX function library
+    require_once( $dir . '/inc/ajax_function.php');
+
     # API function library
     require_once( $dir . '/api_inovacard.php');
 }
@@ -118,4 +126,14 @@ add_filter('upload_mimes', 'add_custom_upload_mimes');
 function add_custom_upload_mimes($existing_mimes) {
     $existing_mimes['ttf'] = 'application/x-font-ttf';
     return $existing_mimes;
+}
+
+# replace content by any template
+function replace_content($arr_replace, $content) {
+    if (is_array($arr_replace)) {
+        foreach ($arr_replace as $key => $value) {
+            $content = str_replace($key, $value, $content);
+        }
+        return $content;
+    }
 }
