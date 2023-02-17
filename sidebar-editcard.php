@@ -69,4 +69,32 @@
             </div>';
     }
     ?>
+
+    <h3>Fonts</h3>
+    <?php 
+    use FileBird\Model\Folder as FolderModel;
+    use FileBird\Classes\Helpers as Helpers;
+
+    # Lấy folder id theo tên folder
+    $folder_id = FolderModel::newOrGet( 'fonts', 0 );
+    # Lấy danh sách file theo folder id đã lấy trước đó
+    $ids = Helpers::getAttachmentIdsByFolderId( $folder_id );
+
+    # Hiển thị file theo danh sách ID 
+    foreach ($ids as $key => $id) {
+        $filelink = wp_get_attachment_url($id);
+        $filename = basename($filelink);
+
+        echo '<div class="file_item">
+                <div>
+                    <a target="_blank" href="' . $filelink . '"><i class="fa fa-file-image-o" aria-hidden="true"></i></a> 
+                    {' . $filename . '}
+                </div>
+                <div>
+                    <a href="{' . $filename . '}" class="copy"><i class="fa fa-files-o" aria-hidden="true"></i></a>
+                    <a href="#" data-fields="field_60e2a2e0a1481" data-fileid="' . $id . '" data-postid="' . $postid . '" class="delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                </div>
+            </div>';
+    }
+    ?>
 </div>

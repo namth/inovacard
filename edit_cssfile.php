@@ -2,8 +2,8 @@
 /* 
     Template Name: Edit Files e.g CSS JS
 */
-use FileBird\Classes\Tree;
 use FileBird\Model\Folder as FolderModel;
+use FileBird\Classes\Helpers as Helpers;
 
 if (isset($_GET['f']) && $_GET['f'] && $_GET['id']) {
     $postid = $_GET['id'];
@@ -18,7 +18,15 @@ if (isset($_GET['f']) && $_GET['f'] && $_GET['id']) {
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
         if (isset($_POST['html']) && ($_POST['html'] != "")) {
+            # Đọc dữ liệu các file font trong thư mục font
+            # Lấy folder id theo tên folder
+            $folder_id = FolderModel::newOrGet( 'fonts', 0 );
+            # Lấy danh sách file theo folder id đã lấy trước đó
+            $ids = Helpers::getAttachmentIdsByFolderId( $folder_id );
+
+            # Đọc danh sách file trong thư mục assets 
             $assets_arr = explode('|', get_field('assets', $postid));
+            $assets_arr = array_merge($assets_arr, $ids);
             foreach ($assets_arr as $value) {
                 if ($value) {
                     $filelink = wp_get_attachment_url($value);
@@ -27,11 +35,13 @@ if (isset($_GET['f']) && $_GET['f'] && $_GET['id']) {
                 }
             }
 
+            # Tìm kiếm và thay dữ liệu đường dẫn của file vào nội dung file css 
             $html   = replace_content($data_replace, $_POST['html']);
 
+            # Ghi lại những thay đổi vào file theo đường dẫn file css 
             file_put_contents($filepath, stripslashes($html));
         }
-        // wp_redirect(get_bloginfo('url'));
+        wp_redirect( get_permalink(37) . '?id=' . $postid );
     }
 
     get_header();

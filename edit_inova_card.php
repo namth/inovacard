@@ -58,6 +58,7 @@ if (isset($_GET['id']) && $_GET['id']) {
         if (isset($_POST['card_folder']) && ($_POST['card_folder'] != "")) {
             $folder_name = $_POST['card_folder'];
             $parent_id = 0;
+            # get or create folder by name
             $folder_id = FolderModel::newOrGet( $folder_name, $parent_id );
             if ($current_folder != $folder_name) {
                 # update folder_name to custom field
