@@ -5,7 +5,6 @@ body {
 a {
   color: #444444;
 }
-
 a:hover {
   color: #f55a4e;
   text-decoration: none;
@@ -16,45 +15,37 @@ a:hover {
   padding: 20px;
 }
 
-.inova_card {
+.inovacard {
   margin: 15px 0;
 }
-
-.inova_card h3 {
+.inovacard img {
+  max-width: 100%;
+}
+.inovacard h3 {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f6f6f6;
 }
-
-.inova_card .mui-panel {
+.inovacard .mui-panel {
   margin: 0;
 }
-
-.inova_card .function_icon ul {
+.inovacard .function_icon ul {
   margin: 5px 0 0;
   padding: 0;
 }
-
-.inova_card .function_icon ul li {
+.inovacard .function_icon ul li {
   list-style: none;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
 }
-
-.inova_card .function_icon ul li a {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
+.inovacard .function_icon ul li a {
   display: inline-flex;
   border: 1px solid #f6f6f6;
-  -webkit-box-shadow: 1px 1px 3px lightgray;
-          box-shadow: 1px 1px 3px lightgray;
+  box-shadow: 1px 1px 3px lightgray;
   border-radius: 5px;
   padding: 8px 10px;
   width: 18px;
   text-align: center;
 }
-
-.inova_card .function_icon ul li a:hover {
+.inovacard .function_icon ul li a:hover {
   background-color: #f55a4e;
   color: white;
 }
@@ -62,17 +53,10 @@ a:hover {
 #login {
   max-width: 100%;
   background-color: #f6f6f6;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  align-items: center;
+  justify-content: center;
   display: flex;
 }
-
 #login .large_left {
   width: 66%;
   height: 100vh;
@@ -81,11 +65,9 @@ a:hover {
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 #login .small_right {
   width: 34%;
   height: 100vh;
-  display: -ms-grid;
   display: grid;
   margin: 0;
   padding: 0 15px;
@@ -95,23 +77,46 @@ a:hover {
   padding: 0 15px;
   text-align: center;
 }
-
 #header_bar .logo {
   display: inline-block;
   font-size: 32px;
   padding: 0;
 }
-
 #header_bar .main_menu {
   float: right;
 }
-
 #header_bar .main_menu .mui-btn {
   padding: 0 10px;
   font-size: 24px;
 }
-
 #header_bar .main_menu .mui-dropdown__menu {
   right: 0;
 }
-/*# sourceMappingURL=inova.css.map */
+
+#file_sidebar .file_item {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
+}
+#file_sidebar .file_item div a {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  font-size: large;
+}
+#file_sidebar .file_item div img {
+  height: 50px;
+  width: auto;
+  display: block;
+  margin-top: 15px;
+}
+
+.mui-textfield .linedwrap {
+  background: #333;
+}
+.mui-textfield .linedwrap .linedtextarea {
+  display: flex;
+}
+.mui-textfield .linedwrap .linedtextarea .html {
+  background: #333;
+  color: white;
+}/*# sourceMappingURL=inova.css.map */

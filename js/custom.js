@@ -47,7 +47,7 @@ var editor = grapesjs.init({
   canvas: {
     styles: [
       "https://fonts.googleapis.com/css2?family=Alex+Brush&family=Dancing+Script:wght@400;500;600;700&family=Italianno&family=Qwigley&family=Lobster&family=Sansita+Swashed:wght@300;400;500;600;700;800;900&family=Srisakdi:wght@400;700&display=swap",
-      "http://fonts.cdnfonts.com/css/uvf-aphrodite-pro",
+      "https://fonts.cdnfonts.com/css/uvf-aphrodite-pro",
     ],
   },
   plugins: [
@@ -814,7 +814,7 @@ editor.Commands.add("save-db", {
 const block = editor.BlockManager;
 
 block.add('inovacards-wrapper-block', {
-    label: 'Vỏ thiệp',
+    label: 'Khung thiệp',
     content: {
         draggable: true,
         components: [{

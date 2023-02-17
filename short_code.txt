@@ -1,0 +1,18 @@
+System
+{html_header} : vi tri dau o header de gan file css
+{html_footer} : vi tri cuoi body de gan file js 
+{home_url} : link trang home 
+{*ten-file*} : duong link toi file do {css} {js} {assets}
+
+Card Infos 
+{chu_re}
+{co_dau}
+{khach_moi}
+{1}
+{2}
+{ngay_gio_cuoi_hoi}
+{dia_diem_to_chuc}
+{chi_duong_dia_diem_to_chuc}
+{loi_moi}
+{function_button}
+{google_maps}

@@ -2,71 +2,166 @@
 /* 
     Template Name: Edit Cards
 */
-get_header();
+use FileBird\Classes\Tree;
+use FileBird\Model\Folder as FolderModel;
 
-if (isset($_POST['html']) && ($_POST['html'] != "")) {
-    update_field('field_60e16c5bab331', $_POST['html'], $postid);
-    update_field('field_60e16c8bab332', $_POST['css'], $postid);
-    update_field('field_60e2a2eda1482', $_POST['components'], $postid);
-    update_field('field_60e2a2e0a1481', $_POST['assets'], $postid);
-    update_field('field_60e2a2fca1483', $_POST['styles'], $postid);
+function inova_import_media($folder_id, $files){
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/media.php');
+    
+    foreach ($files['name'] as $key => $value) {
+        if ($files['name'][$key]) {
+            $file = array( 
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key], 
+                'tmp_name' => $files['tmp_name'][$key], 
+                'error' => $files['error'][$key],
+                'size' => $files['size'][$key]
+            ); 
+            $_FILES = array("upload_file" => $file);
+            $attachment_id = media_handle_upload("upload_file", 0);
+
+            if (is_wp_error($attachment_id)) {
+                // There was an error uploading the image.
+                return false;
+            } else {
+                // The image was uploaded successfully!
+                $post_ids[] = $attachment_id;
+            }
+        }
+    }
+
+    # Add attachments to folder
+    FolderModel::setFoldersForPosts( $post_ids, $folder_id );
+
+    return $post_ids;
 }
-
 
 if (isset($_GET['id']) && $_GET['id']) {
     $postid = $_GET['id'];
-    $html = get_field('html', $postid);
-    $css = get_field('css', $postid);
-    $assets = get_field('assets', $postid);
-    $components = get_field('components', $postid);
-    $styles = get_field('styles', $postid);
+    $current_folder = get_field('folder_name', $postid);
 
+    if (
+        is_user_logged_in() &&
+        isset($_POST['post_nonce_field']) &&
+        wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
+    ) {
+        // print_r($_FILES);
+        if (isset($_POST['card_title']) && ($_POST['card_title']!="")) {
+            $update = wp_update_post(array(
+                'ID'            => $postid,
+                'post_title'    => $_POST['card_title'],
+            ));
+        }
+
+        if (isset($_POST['card_folder']) && ($_POST['card_folder'] != "")) {
+            $folder_name = $_POST['card_folder'];
+            $parent_id = 0;
+            # get or create folder by name
+            $folder_id = FolderModel::newOrGet( $folder_name, $parent_id );
+            if ($current_folder != $folder_name) {
+                # update folder_name to custom field
+                update_field('field_63c602f42df66', $folder_name, $postid);
+            }
+
+            $cssfiles   = $_FILES['cssfiles'];
+            $jsfiles    = $_FILES['jsfiles'];
+            $assets     = $_FILES['assets'];
+            $thumbnail  = $_FILES['thumbnail'];
+
+
+            if ($cssfiles) {
+                $file_ids = inova_import_media($folder_id, $cssfiles);
+                # save css to customfield 
+                if ($file_ids) {
+                    # get current file    
+                    $current_file = explode( '|', get_field('css', $postid));
+                    $list_files = array_merge($current_file, $file_ids);
+                    update_field('field_60e16c8bab332', implode( '|', $list_files), $postid);
+                }
+            }
+            if ($jsfiles) {
+                $file_ids = inova_import_media($folder_id, $jsfiles);
+                # save js to customfield 
+                if ($file_ids) {
+                    # get current file    
+                    $current_file = explode( '|', get_field('components', $postid));
+                    $list_files = array_merge($current_file, $file_ids);
+                    update_field('field_60e2a2eda1482', implode( '|', $list_files), $postid);
+                }
+            }
+            if ($assets) {
+                $file_ids = inova_import_media($folder_id, $assets);
+                # save assets to customfield 
+                if ($file_ids) {
+                    # get current file    
+                    $current_file = explode( '|', get_field('assets', $postid));
+                    $list_files = array_merge($current_file, $file_ids);
+                    update_field('field_60e2a2e0a1481', implode( '|', $list_files), $postid);
+                }
+            }
+            if ($thumbnail) {
+                $file_ids = inova_import_media($folder_id, $thumbnail);
+                set_post_thumbnail($postid, $file_ids[0]);
+            }
+        }
+
+        if (isset($_POST['html']) && ($_POST['html'] != "")) {
+            update_field('field_60e16c5bab331', $_POST['html'], $postid);
+        }
+
+        wp_redirect(get_bloginfo('url'));
+    }
+
+    get_header();
 ?>
     <div class="mui-container-fluid">
         <div class="mui-row">
             <div class="mui-col-md-2">
-                <a class="mui-btn mui-btn--danger" href="javascript:history.go(-1)">Quay lại</a>
+                <a class="mui-btn mui-btn--danger" href="<?php echo get_bloginfo('url') ?>">Quay lại</a>
             </div>
             <div class="mui-col-md-7">
                 <div class="mui-panel">
                     <h3>Sửa thiệp</h3>
-                    <form class="mui-form" method="POST">
+                    <form class="mui-form" method="POST" enctype="multipart/form-data">
                         <div class="mui-textfield">
                             <label for="html">Tên thiệp</label>
-                            <input type="text" name="card_title" value="<?php echo get_the_title( $postid ); ?>">
+                            <input type="text" name="card_title" value="<?php echo get_the_title($postid); ?>">
                         </div>
                         <div class="mui-textfield">
-                            <label for="css">CSS</label>
-                            <textarea placeholder="CSS" name="css"><?php echo $css; ?></textarea>
+                            <label for="html">Tên thư mục chứa file đã upload</label>
+                            <input type="text" name="card_folder" value="<?php echo get_field('folder_name', $postid); ?>">
                         </div>
                         <div class="mui-textfield">
-                            <label for="components">Components</label>
-                            <textarea placeholder="Components" name="components"><?php echo $components; ?></textarea>
+                            <label for="cssfiles">CSS Files</label>
+                            <input type="file" name="cssfiles[]" multiple="multiple">
                         </div>
                         <div class="mui-textfield">
-                            <label for="assets">Assets</label>
-                            <textarea placeholder="Assets" name="assets"><?php echo $assets; ?></textarea>
+                            <label for="jsfiles">JS Files</label>
+                            <input type="file" name="jsfiles[]" multiple="multiple">
                         </div>
                         <div class="mui-textfield">
-                            <label for="styles">Styles</label>
-                            <textarea placeholder="Styles" name="styles"><?php echo $styles; ?></textarea>
+                            <label for="jsfiles">Assets</label>
+                            <input type="file" name="assets[]" multiple="multiple">
                         </div>
-
+                        <div class="mui-textfield">
+                            <label for="jsfiles">Ảnh thumbnail</label>
+                            <input type="file" name="thumbnail[]" multiple="multiple">
+                        </div>
+                        <div class="mui-textfield">
+                            <label for="jsfiles">HTML</label>
+                            <textarea class="html" name="html" cols="30" rows="20"><?php echo get_field('html', $postid); ?></textarea>
+                        </div>
+                        <?php
+                        wp_nonce_field('post_nonce', 'post_nonce_field');
+                        ?>
                         <button type="submit" class="mui-btn mui-btn--raised">Submit</button>
                     </form>
                 </div>
             </div>
-            <div class="mui-col-md-3"></div>
+            <?php get_sidebar('editcard'); ?>
         </div>
-    </div>
-    <div class="mui-col-md-4" id="create_card_form">
-        <form class="mui-form" method="POST">
-            <legend>Tạo thiệp mới</legend>
-            <div class="mui-textfield">
-                <input type="text" placeholder="Tên mẫu" name="card_name">
-            </div>
-            <button type="submit" class="mui-btn mui-btn--primary">Submit</button>
-        </form>
     </div>
 <?php
 }
