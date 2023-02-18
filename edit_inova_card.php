@@ -77,7 +77,7 @@ if (isset($_GET['id']) && $_GET['id']) {
                 if ($file_ids) {
                     # get current file    
                     $current_file = explode( '|', get_field('css', $postid));
-                    $list_files = array_merge($current_file, $file_ids);
+                    $list_files = array_filter(array_merge($current_file, $file_ids));
                     update_field('field_60e16c8bab332', implode( '|', $list_files), $postid);
                 }
             }
@@ -87,7 +87,7 @@ if (isset($_GET['id']) && $_GET['id']) {
                 if ($file_ids) {
                     # get current file    
                     $current_file = explode( '|', get_field('components', $postid));
-                    $list_files = array_merge($current_file, $file_ids);
+                    $list_files = array_filter(array_merge($current_file, $file_ids));
                     update_field('field_60e2a2eda1482', implode( '|', $list_files), $postid);
                 }
             }
@@ -97,7 +97,7 @@ if (isset($_GET['id']) && $_GET['id']) {
                 if ($file_ids) {
                     # get current file    
                     $current_file = explode( '|', get_field('assets', $postid));
-                    $list_files = array_merge($current_file, $file_ids);
+                    $list_files = array_filter(array_merge($current_file, $file_ids));
                     update_field('field_60e2a2e0a1481', implode( '|', $list_files), $postid);
                 }
             }
