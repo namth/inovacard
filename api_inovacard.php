@@ -95,6 +95,7 @@ function check_access(WP_REST_Request $request){
 
 /* Hiển thị danh sách cards */
 function api_list_card() {
+    $status = $_GET['status'];
     $paged = ($_GET['page']) ? absint($_GET['page']) : 1;
 
     $args   = array(
@@ -102,6 +103,10 @@ function api_list_card() {
         'paged'             => $paged,
         'posts_per_page'    => 50,
     );
+
+    if ($status) {
+        $args['post_status'] = $status;
+    }
 
     $query = new WP_Query($args);
 
