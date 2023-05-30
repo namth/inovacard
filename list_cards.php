@@ -4,15 +4,30 @@ get_template_part('header', 'topbar');
 
 $current_user_id = get_current_user_id();
 
+# xóa vào thùng rác một thiệp
 if (isset($_GET['delete'])) {
-    wp_delete_post($_GET['delete']);
+    // wp_delete_post($_GET['delete']);
+    wp_trash_post($_GET['delete']);
     wp_redirect(get_bloginfo('url'));
 }
 
+# chỉnh sửa trạng thái một thiệp
+if (isset($_GET['status'])) {
+    if (in_array($_GET['status'], ['publish', 'private'])) {
+        $args = array(
+            'ID'            => $_GET['id'],
+            'post_status'   => $_GET['status'],
+        );
+        wp_update_post($args);
+    }
+    wp_redirect(get_bloginfo('url'));
+}
+
+# Tạo một thiệp mới
 if (isset($_POST['card_name'])) {
     $args = array(
         'post_title'    => $_POST['card_name'],
-        'post_status'   => 'publish',
+        'post_status'   => 'private',
         'post_type'     => 'inovacard',
     );
 
@@ -53,22 +68,38 @@ if (have_posts()) {
                                     $query->the_post();
 
                                     $image = get_the_post_thumbnail_url();
+
+                                    $status = get_post_status();
+                                    if ($status == 'publish') {
+                                        $icon = '<i class="fa fa-lock" aria-hidden="true"></i>';
+                                        $action = 'private';
+                                    } else if ($status == 'private') {
+                                        $icon = '<i class="fa fa-unlock" aria-hidden="true"></i>';
+                                        $action = 'publish';
+                                    }
                             ?>
                                     <div class="mui-col-md-4 inovacard">
                                         <a href="<?php echo get_permalink(37) . '?id=' . get_the_ID(); ?>">
                                             <div class="mui-panel">
                                                 <img src="<?php echo $image; ?>" alt="">
-                                                <?php the_title(); ?>
+                                                <?php 
+                                                    if ($status == 'private') {
+                                                        echo '<i class="fa fa-lock" aria-hidden="true"></i> ';
+                                                    }
+                                                    the_title(); 
+                                                ?>
                                             </div>
                                         </a>
                                         <div class="function_icon">
                                             <ul>
-                                                <li>
-                                                    <a href="<?php echo get_permalink(16) . '?postid=' . get_the_ID(); ?>"><i class="fas fa-broom"></i></a>
-                                                </li>
-                                                <li>
+                                                <?php 
+                                                    if ($action) {
+                                                        echo '<li><a href="?status=' . $action . '&id=' . get_the_ID() . '">' . $icon . '</a></li>';
+                                                    }
+                                                ?>
+                                                <!-- <li>
                                                     <a href="<?php echo get_permalink(28) . '?id=' . get_the_ID(); ?>"><i class="fas fa-code"></i></a>
-                                                </li>
+                                                </li> -->
                                                 <li>
                                                     <a href="<?php echo get_permalink(); ?>" target="_blank"><i class="fas fa-eye"></i></a>
                                                 </li>

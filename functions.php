@@ -137,3 +137,8 @@ function replace_content($arr_replace, $content) {
         return $content;
     }
 }
+
+# Không hiển thị chữ riêng tư lên tiêu đề bài post
+add_filter( 'private_title_format', function ( $format ) {
+    return '%s';
+} );
