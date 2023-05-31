@@ -181,11 +181,16 @@ function api_detail_card($params) {
 
 /* Chỉ lấy HTML ra khi cần thiết */
 function api_html_card($params) {
+    $status = $_GET['status'];
     $cardid = $params['id'];
     $args   = array(
         'post_type' => 'inovacard',
         'p'         => $cardid,
     );
+
+    if ($status) {
+        $args['post_status'] = $status;
+    }
 
     $query = new WP_Query($args);
     if ($query->have_posts()) {
