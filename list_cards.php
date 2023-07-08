@@ -82,12 +82,14 @@ if (have_posts()) {
                                         <a href="<?php echo get_permalink(37) . '?id=' . get_the_ID(); ?>">
                                             <div class="mui-panel">
                                                 <img src="<?php echo $image; ?>" alt="">
+                                                <div class="title_card">
                                                 <?php 
                                                     if ($status == 'private') {
                                                         echo '<i class="fa fa-lock" aria-hidden="true"></i> ';
                                                     }
                                                     the_title(); 
                                                 ?>
+                                                </div>                                                
                                             </div>
                                         </a>
                                         <div class="function_icon">
