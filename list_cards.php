@@ -27,7 +27,7 @@ if (isset($_GET['status'])) {
 if (isset($_POST['card_name'])) {
     $args = array(
         'post_title'    => $_POST['card_name'],
-        'post_status'   => 'private',
+        'post_status'   => 'publish',
         'post_type'     => 'inovacard',
     );
 
