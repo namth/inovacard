@@ -55,56 +55,54 @@ if (isset($_GET['id']) && $_GET['id']) {
             ));
         }
 
-        if (isset($_POST['card_folder']) && ($_POST['card_folder'] != "")) {
-            $folder_name = $_POST['card_folder'];
-            $parent_id = 0;
-            # get or create folder by name
-            $folder_id = FolderModel::newOrGet( $folder_name, $parent_id );
-            if ($current_folder != $folder_name) {
-                # update folder_name to custom field
-                update_field('field_63c602f42df66', $folder_name, $postid);
-            }
+        $folder_name = $postid;
+        $parent_id = get_current_user_id();
+        # get or create folder by name
+        $folder_id = FolderModel::newOrGet( $folder_name, $parent_id );
+        if ($current_folder != $folder_name) {
+            # update folder_name to custom field
+            update_field('field_63c602f42df66', $folder_name, $postid);
+        }
 
-            $cssfiles   = $_FILES['cssfiles'];
-            $jsfiles    = $_FILES['jsfiles'];
-            $assets     = $_FILES['assets'];
-            $thumbnail  = $_FILES['thumbnail'];
+        $cssfiles   = $_FILES['cssfiles'];
+        $jsfiles    = $_FILES['jsfiles'];
+        $assets     = $_FILES['assets'];
+        $thumbnail  = $_FILES['thumbnail'];
 
 
-            if ($cssfiles) {
-                $file_ids = inova_import_media($folder_id, $cssfiles);
-                # save css to customfield 
-                if ($file_ids) {
-                    # get current file    
-                    $current_file = explode( '|', get_field('css', $postid));
-                    $list_files = array_filter(array_merge($current_file, $file_ids));
-                    update_field('field_60e16c8bab332', implode( '|', $list_files), $postid);
-                }
+        if ($cssfiles) {
+            $file_ids = inova_import_media($folder_id, $cssfiles);
+            # save css to customfield 
+            if ($file_ids) {
+                # get current file    
+                $current_file = explode( '|', get_field('css', $postid));
+                $list_files = array_filter(array_merge($current_file, $file_ids));
+                update_field('field_60e16c8bab332', implode( '|', $list_files), $postid);
             }
-            if ($jsfiles) {
-                $file_ids = inova_import_media($folder_id, $jsfiles);
-                # save js to customfield 
-                if ($file_ids) {
-                    # get current file    
-                    $current_file = explode( '|', get_field('components', $postid));
-                    $list_files = array_filter(array_merge($current_file, $file_ids));
-                    update_field('field_60e2a2eda1482', implode( '|', $list_files), $postid);
-                }
+        }
+        if ($jsfiles) {
+            $file_ids = inova_import_media($folder_id, $jsfiles);
+            # save js to customfield 
+            if ($file_ids) {
+                # get current file    
+                $current_file = explode( '|', get_field('components', $postid));
+                $list_files = array_filter(array_merge($current_file, $file_ids));
+                update_field('field_60e2a2eda1482', implode( '|', $list_files), $postid);
             }
-            if ($assets) {
-                $file_ids = inova_import_media($folder_id, $assets);
-                # save assets to customfield 
-                if ($file_ids) {
-                    # get current file    
-                    $current_file = explode( '|', get_field('assets', $postid));
-                    $list_files = array_filter(array_merge($current_file, $file_ids));
-                    update_field('field_60e2a2e0a1481', implode( '|', $list_files), $postid);
-                }
+        }
+        if ($assets) {
+            $file_ids = inova_import_media($folder_id, $assets);
+            # save assets to customfield 
+            if ($file_ids) {
+                # get current file    
+                $current_file = explode( '|', get_field('assets', $postid));
+                $list_files = array_filter(array_merge($current_file, $file_ids));
+                update_field('field_60e2a2e0a1481', implode( '|', $list_files), $postid);
             }
-            if ($thumbnail) {
-                $file_ids = inova_import_media($folder_id, $thumbnail);
-                set_post_thumbnail($postid, $file_ids[0]);
-            }
+        }
+        if ($thumbnail) {
+            $file_ids = inova_import_media($folder_id, $thumbnail);
+            set_post_thumbnail($postid, $file_ids[0]);
         }
 
         if (isset($_POST['html']) && ($_POST['html'] != "")) {
@@ -115,6 +113,7 @@ if (isset($_GET['id']) && $_GET['id']) {
     }
 
     get_header();
+
 ?>
     <div class="mui-container-fluid">
         <div class="mui-row">
@@ -128,10 +127,6 @@ if (isset($_GET['id']) && $_GET['id']) {
                         <div class="mui-textfield">
                             <label for="html">Tên thiệp</label>
                             <input type="text" name="card_title" value="<?php echo get_the_title($postid); ?>">
-                        </div>
-                        <div class="mui-textfield">
-                            <label for="html">Tên thư mục chứa file đã upload</label>
-                            <input type="text" name="card_folder" value="<?php echo get_field('folder_name', $postid); ?>">
                         </div>
                         <div class="mui-textfield">
                             <label for="cssfiles">CSS Files</label>

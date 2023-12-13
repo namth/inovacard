@@ -34,7 +34,7 @@ add_action('rest_api_init', function (){
     ));
 
     # get HTML each card
-    register_rest_route('inova/v1', 'html/(?P<id>\d+)', array(
+    register_rest_route('inova/v1', 'html/(?P<id>\d+)(?:/(?P<html>[\w]+))?', array(
         'methods'   => 'GET',
         'callback'  => 'api_html_card',
         'args' => array(
@@ -181,15 +181,18 @@ function api_detail_card($params) {
 
 /* Chỉ lấy HTML ra khi cần thiết */
 function api_html_card($params) {
-    $status = $_GET['status'];
     $cardid = $params['id'];
+    $key_html = $params['html'];
     $args   = array(
         'post_type' => 'inovacard',
         'p'         => $cardid,
     );
-
-    if ($status) {
-        $args['post_status'] = $status;
+    
+    if (isset($_GET['status'])) {
+        $status = $_GET['status'];
+        if ($status) {
+            $args['post_status'] = $status;
+        }
     }
 
     $query = new WP_Query($args);
@@ -201,8 +204,11 @@ function api_html_card($params) {
             $content2   = get_field('content_2');
             $content3   = get_field('content_3');
             $content4   = get_field('content_4');
-            $type   = get_field('type');
-            $html   = get_field('html');
+            $type       = get_field('type');
+            if ($key_html) {
+                $html   = get_field($key_html);
+            } else $html   = get_field('html');
+            $print_card_temp   = get_field('print_card_temp');
             $css    = '';
             $js     = '';
 
@@ -210,6 +216,7 @@ function api_html_card($params) {
                 $css = '<style type="text/css">' . get_field('css') . '</style>';
             } else {
                 # nếu là loại HTML thì xử lý 
+                # đọc tất cả file css và lấy link rồi gắn vào thành 1 chuỗi
                 $css_arr = explode('|', get_field('css'));
                 foreach ($css_arr as $value) {
                     if ($value) {
@@ -218,6 +225,7 @@ function api_html_card($params) {
                     }
                 }
 
+                # đọc tất cả file js trong thiệp và lưu vào thành 1 chuỗi
                 $js_arr = explode('|', get_field('components'));
                 foreach ($js_arr as $value) {
                     if ($value) {
@@ -226,6 +234,7 @@ function api_html_card($params) {
                     }
                 }
 
+                # đọc file trong danh sách assets và lấy ra tất cả link ảnh vào mảng $assets
                 $assets_arr = explode('|', get_field('assets'));
                 foreach ($assets_arr as $value) {
                     if ($value) {
@@ -235,10 +244,13 @@ function api_html_card($params) {
                     }
                 }
 
-                $data_replace = array_merge([
-                    '{html_header}' => $css . '{wp_header}',
-                    '{html_footer}' => $js . '{wp_footer}'
-                ], $assets);
+                # tạo mảng thay thế để chèn css, js và ảnh vào thiệp
+                if (isset($assets) && is_array($assets)) {
+                    $data_replace = array_merge([
+                        '{html_header}' => $css . '{wp_header}',
+                        '{html_footer}' => $js . '{wp_footer}'
+                    ], $assets);
+                }
                 $data_replace['{home_url}'] = get_bloginfo('url');
             }
 
@@ -248,6 +260,7 @@ function api_html_card($params) {
             $data['content2'] = $content2;
             $data['content3'] = $content3;
             $data['content4'] = $content4;
+            $data['keyhtml']  = $key_html;
         } wp_reset_postdata();
     } else {
         $data['error_code'] = "404";
@@ -255,3 +268,6 @@ function api_html_card($params) {
 
     return $data;
 }
+
+
+require_once( $dir . '/api/liked_used.php');

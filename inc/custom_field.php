@@ -1,5 +1,8 @@
 <?php
-if( function_exists('acf_add_local_field_group') ):
+add_action('acf/include_fields', function () {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
 
     acf_add_local_field_group(array(
         'key' => 'group_60e16c586a09c',
@@ -9,6 +12,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_6314d75cf5be5',
                 'label' => 'Type',
                 'name' => 'type',
+                'aria-label' => '',
                 'type' => 'radio',
                 'instructions' => '',
                 'required' => 0,
@@ -33,6 +37,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_63c602f42df66',
                 'label' => 'Folder Name',
                 'name' => 'folder_name',
+                'aria-label' => '',
                 'type' => 'text',
                 'instructions' => '',
                 'required' => 0,
@@ -52,6 +57,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_60e16c5bab331',
                 'label' => 'HTML',
                 'name' => 'html',
+                'aria-label' => '',
                 'type' => 'textarea',
                 'instructions' => '',
                 'required' => 0,
@@ -71,6 +77,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_60e16c8bab332',
                 'label' => 'CSS',
                 'name' => 'css',
+                'aria-label' => '',
                 'type' => 'textarea',
                 'instructions' => '',
                 'required' => 0,
@@ -90,6 +97,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_60e2a2e0a1481',
                 'label' => 'Assets',
                 'name' => 'assets',
+                'aria-label' => '',
                 'type' => 'textarea',
                 'instructions' => 'Hình ảnh và font chữ',
                 'required' => 0,
@@ -109,6 +117,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_60e2a2eda1482',
                 'label' => 'JS',
                 'name' => 'components',
+                'aria-label' => '',
                 'type' => 'textarea',
                 'instructions' => 'JS files',
                 'required' => 0,
@@ -126,8 +135,9 @@ if( function_exists('acf_add_local_field_group') ):
             ),
             array(
                 'key' => 'field_60e2a2fca1483',
-                'label' => 'Styles',
-                'name' => 'styles',
+                'label' => 'Mẫu thiệp in',
+                'name' => 'print_card_temp',
+                'aria-label' => '',
                 'type' => 'textarea',
                 'instructions' => '',
                 'required' => 0,
@@ -138,15 +148,36 @@ if( function_exists('acf_add_local_field_group') ):
                     'id' => '',
                 ),
                 'default_value' => '',
-                'placeholder' => '',
                 'maxlength' => '',
                 'rows' => '',
+                'placeholder' => '',
+                'new_lines' => '',
+            ),
+            array(
+                'key' => 'field_65548d1db2d7d',
+                'label' => 'Mẫu thiệp mời thẻ cứng',
+                'name' => 'mini_card_temp',
+                'aria-label' => '',
+                'type' => 'textarea',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'rows' => '',
+                'placeholder' => '',
                 'new_lines' => '',
             ),
             array(
                 'key' => 'field_63da3d7f9d3b6',
                 'label' => 'Content 1',
                 'name' => 'content_1',
+                'aria-label' => '',
                 'type' => 'text',
                 'instructions' => '',
                 'required' => 0,
@@ -166,6 +197,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_63da3da29d3b7',
                 'label' => 'Content 2',
                 'name' => 'content_2',
+                'aria-label' => '',
                 'type' => 'text',
                 'instructions' => '',
                 'required' => 0,
@@ -185,6 +217,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_63da3da59d3b8',
                 'label' => 'Content 3',
                 'name' => 'content_3',
+                'aria-label' => '',
                 'type' => 'text',
                 'instructions' => '',
                 'required' => 0,
@@ -204,6 +237,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_63da3dc39d3b9',
                 'label' => 'Content 4',
                 'name' => 'content_4',
+                'aria-label' => '',
                 'type' => 'text',
                 'instructions' => 'Lời mời',
                 'required' => 0,
@@ -239,7 +273,7 @@ if( function_exists('acf_add_local_field_group') ):
         'description' => '',
         'show_in_rest' => 0,
     ));
-    
+
     acf_add_local_field_group(array(
         'key' => 'group_6295e7447783b',
         'title' => 'Thông tin khác',
@@ -248,6 +282,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_6295e77bc88fd',
                 'label' => 'Liked',
                 'name' => 'liked',
+                'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
                 'required' => 0,
@@ -269,6 +304,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'key' => 'field_6295e78ac88fe',
                 'label' => 'Used',
                 'name' => 'used',
+                'aria-label' => '',
                 'type' => 'number',
                 'instructions' => '',
                 'required' => 0,
@@ -306,5 +342,4 @@ if( function_exists('acf_add_local_field_group') ):
         'description' => '',
         'show_in_rest' => 0,
     ));
-    
-endif;		
+});
