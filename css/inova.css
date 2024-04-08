@@ -150,4 +150,37 @@ a:hover {
 .mui-textfield .linedwrap .linedtextarea .html {
   background: #333;
   color: white;
+}
+
+.pagination ul {
+  text-align: center;
+  margin-top: 39px;
+  margin-bottom: 24px;
+}
+.pagination ul li {
+  display: inline-block;
+  border-radius: 9px;
+  -webkit-box-shadow: 1px 1px 4px lightgray;
+          box-shadow: 1px 1px 4px lightgray;
+  color: black;
+  margin: 0 3px;
+}
+.pagination ul li a {
+  display: block;
+  padding: 6px 15px;
+}
+.pagination ul li a:hover {
+  color: #a37e7e;
+  background: #fff4f4;
+  border-radius: 9px;
+}
+.pagination ul li .current {
+  display: block;
+  padding: 6px 15px;
+  background: #ffe9e9;
+  border-radius: 9px;
+  color: #8b2121;
+  font-weight: bold;
+  -webkit-box-shadow: 1px 1px 4px #ffcdcd;
+          box-shadow: 1px 1px 4px #ffcdcd;
 }/*# sourceMappingURL=inova.css.map */

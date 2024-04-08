@@ -50,9 +50,9 @@ if (is_user_logged_in()) {
 
             $userID = $user->ID;
 
+            do_action('wp_login', $username, $user);
             wp_set_current_user($userID, $username);
-            wp_set_auth_cookie($userID, true, false);
-            do_action('wp_login', $username);
+            wp_set_auth_cookie($userID, true);
 
             // redirect sang trang chủ
             wp_redirect(get_bloginfo('url'));

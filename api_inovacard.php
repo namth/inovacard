@@ -1,4 +1,5 @@
 <?php 
+require_once( $dir . '/api/liked_used.php');
 
 add_action('rest_api_init', function (){
     # get access token
@@ -95,22 +96,40 @@ function check_access(WP_REST_Request $request){
 
 /* Hiển thị danh sách cards */
 function api_list_card() {
-    $status = $_GET['status'];
-    $paged = ($_GET['page']) ? absint($_GET['page']) : 1;
-
+    $post_per_page  = 36;
+    $paged          = (isset($_GET['page']) && $_GET['page']) ? absint($_GET['page']) : 1;
+    
     $args   = array(
         'post_type'         => 'inovacard',
         'paged'             => $paged,
-        'posts_per_page'    => 50,
+        'posts_per_page'    => $post_per_page,
     );
-
-    if ($status) {
-        $args['post_status'] = $status;
+    
+    # nếu có biến status thì thêm vào $args
+    if (isset($_GET['status'])) {
+        $args['post_status'] = $_GET['status'];
     }
+
+    # nếu có biến cat thì set và $args
+    if (isset($_GET['cat'])) {
+        $args['cat'] = $_GET['cat'];
+    }
+    if (isset($_GET['catin'])) {
+        $args['category__in'] = json_decode($_GET['catin']);
+    }
+    if (isset($_GET['catand'])) {
+        $args['category__and'] = json_decode($_GET['catand']);
+    }
+
 
     $query = new WP_Query($args);
 
-    $data   = array();
+    $data   = [
+        // 'query'         =>  $args,
+        'total_post'    =>  $query->found_posts,
+        'total_page'    =>  $query->max_num_pages,
+        'current_page'  =>  $paged
+    ];
     $i      = 0;
 
     if ($query->have_posts()) {
@@ -118,19 +137,19 @@ function api_list_card() {
             $query->the_post();
 
             $image  = get_the_post_thumbnail_url();
-            $price  = get_field('price');
+            // $price  = get_field('price');
             $liked  = get_field('liked');
             $used   = get_field('used');
 
             # basic content
-            $data[$i]['ID']         = get_the_ID();
-            $data[$i]['title']      = get_the_title();
-            $data[$i]['thumbnail']  = $image;
+            $data['cards'][$i]['ID']         = get_the_ID();
+            $data['cards'][$i]['title']      = get_the_title();
+            $data['cards'][$i]['thumbnail']  = $image;
 
             # more content
-            $data[$i]['price']      = $price;
-            $data[$i]['liked']      = $liked;
-            $data[$i]['used']       = $used;
+            // $data[$i]['price']      = $price;
+            $data['cards'][$i]['liked']      = $liked;
+            $data['cards'][$i]['used']       = $used;
             
             $i++;
         } wp_reset_postdata();
@@ -204,17 +223,16 @@ function api_html_card($params) {
             $content2   = get_field('content_2');
             $content3   = get_field('content_3');
             $content4   = get_field('content_4');
-            $type       = get_field('type');
-            if ($key_html) {
+            // $type       = get_field('type');
+            /* if ($key_html) {
                 $html   = get_field($key_html);
-            } else $html   = get_field('html');
-            $print_card_temp   = get_field('print_card_temp');
+            } else */ $html   = get_field('html');
             $css    = '';
             $js     = '';
 
-            if ($type!='HTML') {
-                $css = '<style type="text/css">' . get_field('css') . '</style>';
-            } else {
+            // if ($type!='HTML') {
+            //     $css = '<style type="text/css">' . get_field('css') . '</style>';
+            // } else {
                 # nếu là loại HTML thì xử lý 
                 # đọc tất cả file css và lấy link rồi gắn vào thành 1 chuỗi
                 $css_arr = explode('|', get_field('css'));
@@ -252,15 +270,17 @@ function api_html_card($params) {
                     ], $assets);
                 }
                 $data_replace['{home_url}'] = get_bloginfo('url');
-            }
+            // }
 
+            #replace các component vào thiệp
+            $html = component_replace($html);
+            
             # basic content
             $data['html']   = replace_content($data_replace, $html);
             $data['content1'] = $content1;
             $data['content2'] = $content2;
             $data['content3'] = $content3;
             $data['content4'] = $content4;
-            $data['keyhtml']  = $key_html;
         } wp_reset_postdata();
     } else {
         $data['error_code'] = "404";
@@ -270,4 +290,3 @@ function api_html_card($params) {
 }
 
 
-require_once( $dir . '/api/liked_used.php');

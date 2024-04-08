@@ -142,3 +142,83 @@ function replace_content($arr_replace, $content) {
 add_filter( 'private_title_format', function ( $format ) {
     return '%s';
 } );
+
+# set secure for wp_login
+add_action( 'set_auth_cookie', function ( $cookie ) {
+    $cookie_name = is_ssl() ? SECURE_AUTH_KEY : AUTH_KEY;
+    $_COOKIE[ $cookie_name ] = $cookie;
+} );
+
+add_action( 'set_logged_in_cookie', function ( $cookie ) {
+    $_COOKIE[ LOGGED_IN_KEY ] = $cookie;
+} );
+
+
+# tìm kiếm và thay thế các thành phần thiệp theo component
+function component_replace($html) {
+    # định nghĩa pattern tìm kiếm
+    $beforetag  = '<#';
+    $aftertag   = '#>';
+    $pattern    = '/'. $beforetag .'(.*?)' . $aftertag . '/';
+
+    if (preg_match_all($pattern, $html, $matches)) {
+        # khởi tạo biến lưu trữ
+        $css = $js = "";
+        foreach ($matches[1] as $component_element) {
+            # với mỗi loại, lấy ra một bài viết tương ứng và gán vào mảng thay thế
+            # nếu $component_element là số thì sẽ lấy content của bài viết tương ứng với ID đó
+            # nếu là chữ thì sẽ lấy bài viết đầu tiên theo phân loại đó.
+            if (is_numeric($component_element)) {
+                $content_post = get_post($component_element);
+                $replace_content = $content_post->post_content;
+            } else {
+                $args = array(
+                    'post_type' => 'component',
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => 'card_element',
+                            'field' => 'slug',
+                            'terms' => $component_element
+                        )
+                    ),
+                    'orderby'   => 'ID',
+                    'order'     => 'ASC',
+                    'posts_per_page' => 1
+                );
+
+                $query = new WP_Query( $args );
+
+                if ($query->have_posts()) {
+                    while ($query->have_posts()) {
+                        $query->the_post();
+
+                        $replace_content = get_the_content();
+
+                        # đọc css và js để gắn vào cuối file
+                        $css    .= get_field('css');
+                        $js     .= get_field('components');
+                    }
+                    wp_reset_postdata();
+                }
+            }
+
+            $card_replace[$beforetag . $component_element . $aftertag] = $replace_content;
+        }
+
+        $add_footer = '
+            <style type="text/css">'
+                . $css .
+            '</style>
+            <script>
+                jQuery(document).ready(function ($) {
+                    ' . $js . '
+                });
+            </script>';
+
+        $card_replace['{html_footer}'] = '{html_footer}' . $add_footer;
+
+        return replace_content($card_replace, $html);
+    } else {
+        return $html;
+    }
+}

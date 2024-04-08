@@ -52,12 +52,12 @@ if (have_posts()) {
                             $current_user = wp_get_current_user();
 
                             // xử lý phân trang
-                            $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+                            $paged = (get_query_var('page')) ? absint(get_query_var('page')) : 1;
 
                             $args   = array(
                                 'post_type'     => 'inovacard',
                                 'paged'         => $paged,
-                                'posts_per_page' => 20,
+                                'posts_per_page' => 21,
                                 'author'        => $current_user_id,
                             );
 
@@ -129,7 +129,7 @@ if (have_posts()) {
                             echo paginate_links(array(
                                 'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
                                 'format'    => '?paged=%#%',
-                                'current'   => max(1, get_query_var('paged')),
+                                'current'   => max(1, get_query_var('page')),
                                 'total'     => $query->max_num_pages,
                                 'type'      => 'list',
                             ));
