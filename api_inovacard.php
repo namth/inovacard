@@ -272,8 +272,13 @@ function api_html_card($params) {
                 $data_replace['{home_url}'] = get_bloginfo('url');
             // }
 
-            #replace các component vào thiệp
+            #replace các component vào thiệp trước khi thay thể các dữ liệu khác
             $html = component_replace($html);
+
+            # nếu trong html có chứa các component con thì tiếp tục thay thế
+            if (preg_match_all('/<#(.*?)#>/', $html, $matches)) {
+                $html = component_replace($html);
+            }
             
             # basic content
             $data['html']   = replace_content($data_replace, $html);

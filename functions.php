@@ -155,12 +155,15 @@ add_action( 'set_logged_in_cookie', function ( $cookie ) {
 
 
 # tìm kiếm và thay thế các thành phần thiệp theo component
+# loại dữ liệu truyền vào có thể là ID hoặc slug của component
+# mẫu component trên thiệp <#ID#> hoặc <#category-slug#>
 function component_replace($html) {
     # định nghĩa pattern tìm kiếm
     $beforetag  = '<#';
     $aftertag   = '#>';
     $pattern    = '/'. $beforetag .'(.*?)' . $aftertag . '/';
 
+    # tìm kiếm các thành phần component trong thiệp, nếu có thì thay thế
     if (preg_match_all($pattern, $html, $matches)) {
         # khởi tạo biến lưu trữ
         $css = $js = "";
@@ -169,6 +172,7 @@ function component_replace($html) {
             # nếu $component_element là số thì sẽ lấy content của bài viết tương ứng với ID đó
             # nếu là chữ thì sẽ lấy bài viết đầu tiên theo phân loại đó.
             if (is_numeric($component_element)) {
+                # lấy content của bài viết
                 $content_post = get_post($component_element);
                 $replace_content = $content_post->post_content;
             } else {

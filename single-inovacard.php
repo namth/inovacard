@@ -58,6 +58,11 @@ if( have_posts() ) {
         $html = get_field('html');
         #replace các component vào thiệp
         $html = component_replace($html);
+        # nếu trong html có chứa các component con thì tiếp tục thay thế
+        if (preg_match_all('/<#(.*?)#>/', $html, $matches)) {
+            $html = component_replace($html);
+        }
+        
         $css_arr = explode('|', get_field('css'));
         foreach ($css_arr as $value) {
             if ($value) {
